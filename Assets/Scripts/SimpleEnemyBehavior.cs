@@ -5,7 +5,10 @@ using UnityEngine;
 public class SimpleEnemyBehavior : MonoBehaviour
 {
     private Vector3 velocity;
-
+    public static int planetDamage = 0, planetMaxHealth = 5;
+    public PlanetBehavior planet;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,10 +21,19 @@ public class SimpleEnemyBehavior : MonoBehaviour
     {
         transform.Translate(velocity * Time.deltaTime, Space.World);
 
-        //Destroys enemy if it reaches planet
+        //Destroys self and damages or kills planet if it reaches planet
         if (transform.position.magnitude < 2)
         {
             Destroy(gameObject);
+            planetDamage++;
+            if (planetDamage < planetMaxHealth)
+            {
+                planet.damagePlanet(planetDamage);
+            }
+            else if (planetDamage == planetMaxHealth)
+            {
+                planet.planetDeath();
+            }
         }
     }
 }

@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float aimInput, speedInput, aimBound = 120, aimSpeed = 200;
+    private float aimInput, speedInput, aimBound = 110, aimSpeed = 200;
     public GameObject aimArrow;
     public GameObject missilePrefab;
+    private static bool isAlive;
+    private static float missileCount, missileMax = 5;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        missileCount = 0;
+        isAlive = true;
     }
 
     // Update is called once per frame
@@ -56,8 +59,9 @@ public class PlayerController : MonoBehaviour
         }
         
         //Create a missile when space is pressed
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isAlive & Input.GetKeyDown(KeyCode.Space) & missileCount < missileMax)
         {
+            missileCount++;
             float xPosDif = 4 * (aimArrow.transform.position.x - transform.position.x);
             if (xPosDif > 1)
             {
@@ -72,5 +76,15 @@ public class PlayerController : MonoBehaviour
                         Quaternion.Euler(0, Mathf.Acos(xPosDif) * 180 / Mathf.PI *
                         -Mathf.Sign(Mathf.Asin(zPosDif)), -90));
         }
+    }
+
+    public static void decrementMissileCount()
+    {
+        missileCount--;
+    }
+
+    public static void planetDeath()
+    {
+        isAlive = false;
     }
 }

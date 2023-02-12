@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class MissileMovement : MonoBehaviour
 {
-    private Vector3 velocity, gravDirection, gravVelocity = Vector3.zero;
-    private float life;
+    private Vector3 velocity, gravDirection;
+    private float life, xBound = 9, zBound = 7;
     
     // Start is called before the first frame update
     void Start()
     {
         transform.Translate(Vector3.up * .25f);
-        velocity = 3 * Vector3.up;
+        velocity = new Vector3(3 * Mathf.Cos(Mathf.PI / 180 * (360 - transform.rotation.eulerAngles.y)), 0,
+                               3 * Mathf.Sin(Mathf.PI / 180 * (360 - transform.rotation.eulerAngles.y)));
         life = Time.realtimeSinceStartup;
     }
 
@@ -21,19 +22,38 @@ public class MissileMovement : MonoBehaviour
         //If missile is live, determine gravity and apply it to velocity, then move missile.
         if (Time.realtimeSinceStartup - life < 10)
         {
-            float gravConstant = 4f * Time.deltaTime / Mathf.Pow(calcDistance(), 2);
+            float gravConstant = 45f * Time.deltaTime / Mathf.Pow(calcDistance(), 4);
             gravDirection = new Vector3(-transform.position.x * gravConstant, 0,
                                         -transform.position.z * gravConstant);
-            gravVelocity += gravDirection;
+            velocity += gravDirection;
         }
-        transform.Translate(velocity * Time.deltaTime);
-        transform.Translate(gravVelocity * Time.deltaTime, Space.World);
+        transform.Translate(velocity * Time.deltaTime, Space.World);
 
+        //Set rotation of missile so that it always faces the direction it travels
+        float becauseArcTrigBounds = Mathf.Sign(velocity.z);
+        if (becauseArcTrigBounds >= 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 360 - (180 / Mathf.PI
+                                                  * Mathf.Acos(velocity.x / velocity.magnitude)), -90);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 360 - (180 + 180 / Mathf.PI
+                                                  * Mathf.Acos(-velocity.x / velocity.magnitude)), -90);
+        }
+        
 
         //Destroy missile if it hits planet
         if (calcDistance() < 2)
         {
             Destroy(gameObject);
+            PlayerController.decrementMissileCount();
+        }
+        
+        if (Mathf.Abs(transform.position.x) > xBound | Mathf.Abs(transform.position.z) > zBound)
+        {
+            Destroy(gameObject);
+            PlayerController.decrementMissileCount();
         }
     }
 
@@ -41,6 +61,8 @@ public class MissileMovement : MonoBehaviour
     {
         Destroy(gameObject);
         Destroy(other.gameObject);
+        PlayerController.decrementMissileCount();
+        ScoreTracker.incrementKill();
     }
 
     //Calculates distance from the origin
