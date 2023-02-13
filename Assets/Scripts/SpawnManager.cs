@@ -8,13 +8,13 @@ public class SpawnManager : MonoBehaviour
     private float xBound = 11, zBound = 9;
     public GameObject enemyPrefab;
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         Invoke("SpawnEnemy", 5);
     }
 
-    // Spawns an Enemy in a random position off the screen
+    //Spawns an Enemy in a random position off the screen
     void SpawnEnemy()
     {
         //Choose a random side of the screen, then spawn an enemy in a random spot on that side
@@ -36,9 +36,8 @@ public class SpawnManager : MonoBehaviour
             Instantiate(enemyPrefab, new Vector3(-xBound, 0, Random.Range(-zBound, zBound)), Quaternion.identity);
         }
 
-        /**Invoke this function after enough time passes (becomes more frequent over time)
-         * On average, for every minute of gameplay, spawns enemies 1 second faster (minimum .5 second delay).
-         */
+        //Invoke this function after enough time passes (becomes more frequent over time)
+        //On average, for every minute of gameplay, spawns enemies 1 second faster (minimum .5 second delay).
         float delay = Random.Range(spawnDelayMin - Time.realtimeSinceStartup / 60,
                                    spawnDelayMax - Time.realtimeSinceStartup / 60);
         if (delay < .5f)

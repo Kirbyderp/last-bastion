@@ -10,28 +10,27 @@ public class PlayerController : MonoBehaviour
     private static bool isAlive;
     private static float missileCount, missileMax = 5;
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         missileCount = 0;
         isAlive = true;
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
-        //Updates position to orbit around the planet.
+        //Updates position to orbit around the planet
         transform.RotateAround(Vector3.zero, Vector3.up, Time.deltaTime * -9);
 
         //Allows player to aim with the a/d or left/right keys
+        //The player can change the speed the aim arrow moves with the z/x or ,/. keys
         aimInput = Input.GetAxis("Aim");
         speedInput = Input.GetAxis("Speed");
         aimArrow.transform.RotateAround(transform.position, Vector3.up,
                                         Time.deltaTime * aimInput * Mathf.Pow(2, speedInput) * aimSpeed);
 
-
-
-        //Keeps aim within a certain bound
+        //Keeps aim within ±aimBound° of the direction the satellite is from the planet's center
         float angleDif;
         if (aimArrow.transform.rotation.eulerAngles.y > transform.rotation.eulerAngles.y)
         {
@@ -58,7 +57,7 @@ public class PlayerController : MonoBehaviour
                                             Time.deltaTime * -aimInput * Mathf.Pow(2, speedInput) * aimSpeed);
         }
         
-        //Create a missile when space is pressed
+        //If the player hasn't game over'd, create a missile when the space key is pressed
         if (isAlive & Input.GetKeyDown(KeyCode.Space) & missileCount < missileMax)
         {
             missileCount++;
@@ -78,11 +77,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Decrements the count of missiles by one
     public static void decrementMissileCount()
     {
         missileCount--;
     }
 
+    //Called by PlanetBehavior, assigns isAlive to false to prevent the player from spawning missiles post-game
     public static void planetDeath()
     {
         isAlive = false;

@@ -9,16 +9,17 @@ public class SimpleEnemyBehavior : MonoBehaviour
     public PlanetBehavior planet;
     
     
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         velocity = new Vector3(-transform.position.x / transform.position.magnitude, 0,
                                -transform.position.z / transform.position.magnitude);
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
+        //Moves enemy towards planet
         transform.Translate(velocity * Time.deltaTime, Space.World);
 
         //Destroys self and damages or kills planet if it reaches planet

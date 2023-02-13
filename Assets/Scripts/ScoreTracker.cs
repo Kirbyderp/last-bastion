@@ -11,7 +11,7 @@ public class ScoreTracker : MonoBehaviour
     private static int numKills;
     public TMPro.TextMeshPro dispText;
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         timeScore = 0;
@@ -23,9 +23,10 @@ public class ScoreTracker : MonoBehaviour
         InvokeRepeating("UpdateTimeScore", 0, 1);
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
+        //Calculates current score, then updates the displayed text appropriately
         dispScore = (int)(timeScore) + 20 * numKills;
         
         if (!isAlive)
@@ -43,6 +44,7 @@ public class ScoreTracker : MonoBehaviour
         }
     }
 
+    //Updates the time component of the score while the player hasn't game over'd
     void UpdateTimeScore()
     {
         if (isAlive)
@@ -51,11 +53,13 @@ public class ScoreTracker : MonoBehaviour
         }
     }
 
+    //For score purposes, increments the number of kills the player made by 1
     public static void incrementKill()
     {
         numKills++;
     }
 
+    //Called by PlanetBehavior, assigns certain variable values to assist in the game over animation
     public static void planetDeath()
     {
         isAlive = false;

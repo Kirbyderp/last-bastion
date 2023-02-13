@@ -14,7 +14,7 @@ public class PlanetBehavior : MonoBehaviour
                                                      {159f/255, 111f/255, 91f/255},
                                                      {210f/255, 91f/255, 43f/255}};
     
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         //Reset altered material colors
@@ -26,7 +26,7 @@ public class PlanetBehavior : MonoBehaviour
         colorTimer = 0;
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
         
@@ -36,15 +36,15 @@ public class PlanetBehavior : MonoBehaviour
         {
             float expandRate = 3 * Time.deltaTime;
             if (transform.localScale.y < 10)
-            {
+            {   //Expands planet (planet go boom).
                 transform.localScale += new Vector3(expandRate, expandRate, expandRate);
             }
             else if (transform.localScale.x < 20)
-            {
+            {   //Expands planet outwards ONLY to prevent it from clipping into the camera
                 transform.localScale += new Vector3(expandRate, 0, expandRate);
             }
             else if (planetColor.color.r > 1)
-            {
+            {   //Fade the texture on the planet to black (as if it's cooling off).
                 colorTimer += Time.deltaTime;
                 if (lightTrigger)
                 {
@@ -54,13 +54,13 @@ public class PlanetBehavior : MonoBehaviour
                 planetColor.SetColor("_Color", new Color(3 - colorTimer, 0, 0));
             }
             else if (gameOverColor.color.a < 1)
-            {
+            {   //Fade in the game over screen
                 colorTimer += Time.deltaTime;
                 gameOverColor.SetColor("_Color", new Color(0, 0, 0, .5f * (colorTimer - 2)));
                 gameOverText.faceColor = new Color(1, 1, 1, .5f * (colorTimer - 2));
             }
             else
-            {
+            {   //No need to go through this massive if statement once the animation is complete
                 playDeath = false;
             }
         }

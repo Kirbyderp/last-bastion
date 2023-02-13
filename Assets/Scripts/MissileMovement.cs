@@ -7,7 +7,7 @@ public class MissileMovement : MonoBehaviour
     private Vector3 velocity, gravDirection;
     private float life, xBound = 9, zBound = 7;
     
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         transform.Translate(Vector3.up * .25f);
@@ -16,7 +16,7 @@ public class MissileMovement : MonoBehaviour
         life = Time.realtimeSinceStartup;
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
         //If missile is live, determine gravity and apply it to velocity, then move missile.
@@ -50,6 +50,7 @@ public class MissileMovement : MonoBehaviour
             PlayerController.decrementMissileCount();
         }
         
+        //Destroy missile if it goes out of bounds
         if (Mathf.Abs(transform.position.x) > xBound | Mathf.Abs(transform.position.z) > zBound)
         {
             Destroy(gameObject);
@@ -57,6 +58,7 @@ public class MissileMovement : MonoBehaviour
         }
     }
 
+    //Destroy missile and enemy if they collide and increment kill count for score purposes
     void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);

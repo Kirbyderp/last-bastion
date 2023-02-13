@@ -7,13 +7,13 @@ public class LightRotater : MonoBehaviour
     private static bool deathLight;
     public Light lightComp;
     
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         deathLight = false;
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
         if (!deathLight)
@@ -27,6 +27,7 @@ public class LightRotater : MonoBehaviour
         }
     }
 
+    //Sets deathLight to true, which will move the directional light to assist the game over animation
     public static void triggerDeathLight()
     {
         deathLight = true;
